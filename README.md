@@ -1,0 +1,2 @@
+# sg.cli
+Superglue CLI
