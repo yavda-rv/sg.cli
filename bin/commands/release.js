@@ -1,25 +1,22 @@
 const fs = require("fs");
 const path = require("path");
-const printer = require("./lib/printer");
-const sgSchema = require("./lib/superglueSchema");
-const simpleGit = require("simple-git");
+const msg = require("../lib/msg");
+const printer = require("../lib/printer");
+const sgSchema = require("../core/superglueSchema");
 const clui = require("clui");
 const archiver = require("archiver");
-const npm = require("./lib/npm");
+const npm = require("../lib/npm");
 const columnify = require("columnify");
-
-//https://github.com/steveukx/git-js/blob/HEAD/typings/response.d.ts
-//https://www.npmjs.com/package/simple-git
-const git = simpleGit({ baseDir: process.cwd(), binary: "git", maxConcurrentProcesses: 1 });
+const git = require("../lib/git");
 
 async function release(type) {
     let superglueJson = readSuperglueJson();
     let packageJson = readPackageJson();
     await verifyGitClean();
-    build();
-    let releasedVersion = updateVersion(type);
-    build();
-    minify(superglueJson);
+    await build();
+    let releasedVersion = await updateVersion(type);
+    await build();
+    await minify(superglueJson);
     await archive(superglueJson, packageJson);
     let newVersion = await postRelease(superglueJson);
     await push();
@@ -29,7 +26,7 @@ async function release(type) {
 
 async function postRelease(json) {
     // increment the version again for new release
-    npm.version("prerelease", { tag: false, preid: json.release.preId });
+    await npm.version("prerelease", { tag: false, preid: json.release.preId });
     currentVersion = readPackageJson().version;
     await git.add(["package.json"]);
     await git.commit(`"starting v${currentVersion}"`);
@@ -89,18 +86,18 @@ async function verifyGitClean() {
 
 async function build() {
     printer.info("Building plugin...");
-    npm.run("build");
+    await npm.run("build");
 }
 
-function updateVersion(version) {
+async function updateVersion(version) {
     printer.info("Updating version...");
-    npm.version(version);
+    await npm.version(version);
     return readPackageJson().version;
 }
 
-function minify(json) {
+async function minify(json) {
     printer.info("creating minified js bundle...");
-    npm.npx(`rollup -c -p 'terser={compress:true,mangle:true}' -o ${json.release.main}`);
+    await npm.npx(`rollup -c -p 'terser={compress:true,mangle:true}' -o ${json.release.main}`);
 }
 
 function archive(superglueJson, packageJson) {
@@ -140,18 +137,18 @@ function archive(superglueJson, packageJson) {
         const data = {};
         filesToZip.forEach(item => {
             if (!fs.existsSync(item)) {
-                data[printer.warnNoLog(item)] = printer.warnNoLog("skipped");
+                data[msg.warn(item)] = msg.warn("skipped");
                 return;
             }
 
             if (fs.statSync(item).isFile()) {
-                data[printer.infoNoLog(item)] = printer.infoNoLog("included");
+                data[msg.info(item)] = msg.info("included");
                 archive.file(item);
             } else if (fs.statSync(item).isDirectory()) {
-                data[printer.infoNoLog(item)] = printer.infoNoLog("included");
+                data[msg.info(item)] = msg.info("included");
                 archive.directory(item);
             } else {
-                data[printer.warnNoLog(item)] = printer.warnNoLog("unknown");
+                data[msg.warn(item)] = msg.warn("unknown");
             }
         });
         console.log(columnify(data, { columns: ["PATH", "STATUS"] }));

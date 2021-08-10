@@ -1,45 +1,32 @@
-const chalk = require("chalk");
+const msg = require("./msg");
 
-function error(message) {
-    if (Array.isArray(message)) {
-        message.forEach(m => error(m));
+function print(value, method) {
+    if (Array.isArray(value)) {
+        value.forEach(m => method(m));
     } else {
-        console.log(chalk.redBright(message));
+        console.log(method(value));
     }
 }
 
-function errorNoLog(message) {
-    return chalk.redBright(message);
+function error(message) {
+    print(message, msg.error);
 }
 
 function warn(message) {
-    console.log(chalk.yellowBright(message));
-}
-function warnNoLog(message) {
-    chalk.yellowBright(message);
+    print(message, msg.warn);
 }
 
 function info(message) {
-    console.log(chalk.blueBright(message));
-}
-function infoNoLog(message) {
-    return chalk.blueBright(message);
+    print(message, msg.info);
 }
 
 function success(message) {
-    console.log(chalk.greenBright(message));
-}
-function successNoLog(message) {
-    return chalk.greenBright(message);
+    print(message, msg.success);
 }
 
 module.exports = {
     error,
     warn,
     info,
-    success,
-    errorNoLog,
-    warnNoLog,
-    infoNoLog,
-    successNoLog
+    success
 }

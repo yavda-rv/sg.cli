@@ -1,26 +1,27 @@
-const { execSync } = require("child_process");
+const { execASync } = require("child_process");
+const verbose = require("./verbose");
 
 function exec(command) {
     try {
-        execSync(command, { stdio: "inherit" });
+        return execASync(command, { stdio: verbose.getVerbose()? "inherit": "ignore" });
     } catch (err) {
         throw err;
     }
 }
 
 async function run(name, ...args) {
-    exec(`npm run ${name} ${args.join(" ")}`);
+    return exec(`npm run ${name} ${args.join(" ")}`);
 }
 
-async function npx(command) {
-    exec(`npx ${command}`);
+function npx(command) {
+    return exec(`npx ${command}`);
 }
 
-async function version(type, opts) {
+function version(type, opts) {
     const pNoTag = (opts && opts.tag === false) ? "--no-git-tag-version" : "";
     const preId = (opts && opts.preid) ? `--preid=${opts.preid}` : "";
     let command=`npm ${pNoTag} version ${type} ${preId}`;
-    exec(command);
+    return exec(command);
 }
 
 module.exports = {
