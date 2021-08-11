@@ -1,20 +1,26 @@
 {
-    "name": "sg.cli",
+    "name": "superglue.cli",
     "version": "1.0.0",
     "description": "Superglue CLI",
     "main": "bin/index.js",
     "bin": {
         "superglue": "index.js"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yavda-rv/sg.cli.git"
+    },
+    "keywords": [
+        "Superglue",
+        "CLI",
+        "command line"
+    ],
     "scripts": {},
-    "author": "",
+    "author": "radhey_rec@yahoo.com",
     "license": "ISC",
     "dependencies": {
-        "@octokit/auth-basic": "^1.4.8",
-        "@octokit/rest": "^18.9.0",
         "ajv": "^8.6.2",
         "archiver": "^5.3.0",
-        "axios": "^0.21.1",
         "boxen": "^5.0.1",
         "chalk": "^4.1.2",
         "clear": "^0.1.0",
