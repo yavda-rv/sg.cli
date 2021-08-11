@@ -11,12 +11,12 @@ async function create(name) {
     createDirectory(path.join(name, 'src'));
 
     printer.info("Writing plugin files...");
-    writers.superglueJson(name);
-    writers.packageJson(name);
-    writers.apiExtractorJson(name);
-    writers.tsConfigJson(name);
+    await writers.superglueJson(name);
+    await writers.packageJson(name);
+    await writers.apiExtractorJson(name);
+    await writers.tsConfigJson(name);
     await writers.rollupConfigJs(name);
-    writers.gitIgnore(name);
+    await writers.gitIgnore(name);
     await writers.entryPoint(name);
     printer.info("Plugin files are generated");
 

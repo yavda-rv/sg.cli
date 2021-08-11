@@ -6,7 +6,7 @@ const { release } = require("./bin/commands/release");
 
 yargs(process.argv.slice(2))
     .command({
-        command: "create <name>",
+        command: "create [name]",
         desc: "Creates superglue plugin",
         builder: (yargs) => {
             yargs.positional("name", { desc: "name of the plugin" })

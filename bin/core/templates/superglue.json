@@ -1,0 +1,12 @@
+{
+    "release": {
+        "preId": "alpha",
+        "main": "lib/index.min.js",
+        "package": {
+            "include": []
+        },
+        "publish": {
+            "dir": "../releases/"
+        }
+    }
+}
