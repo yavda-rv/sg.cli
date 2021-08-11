@@ -9,7 +9,6 @@ function superglueJson() {
         const json = JSON.parse(fs.readFileSync(fullPath).toString());
         let result = schema.verify(json);
         if (result.isValid) {
-            printer.info("superglue.json is valid.");
             return json;
         } else {
             printer.error(["superglue.json schema invalid. Found these errors:", "", ...result.errors]);
