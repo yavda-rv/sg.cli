@@ -1,24 +1,6 @@
-const ajv = require("ajv");
+const {TYP_OBJ, verify, TYP_STRING_ARR, TYP_STRING} = require("../lib/schema");
 
-const TYPES = {
-    object: "object",
-    string: "string",
-    array: "array",
-};
-
-const TYP_STRING = { type: TYPES.string };
-const TYP_STRING_ARR = { type: TYPES.array, items: TYP_STRING };
-const TYP_OBJ = (obj) => {
-    return {
-        type: TYPES.object,
-        additionalProperties: false,
-        required: Object.keys(obj),
-        properties: obj
-    }
-}
-
-//schema starts from here.
-const sgJson = TYP_OBJ({
+const schema = TYP_OBJ({
     release: TYP_OBJ({
         preId: TYP_STRING,
         main: TYP_STRING,
@@ -31,29 +13,14 @@ const sgJson = TYP_OBJ({
     })
 });
 
-
-function transform(errors) {
-    if (!errors || errors.length == 0) {
-        return []
-    }
-    return errors.map(err => {
-        if(err.keyword == "additionalProperties")
-            return `'${err.instancePath}' ${err.message}. Found: ${err.params.additionalProperty}`;
-
-        return `'${err.instancePath}' ${err.message}.`;
-    });
-}
-
-function verify(json) {
-    const validate = (new ajv()).compile(sgJson);
-    const valid = validate(json);
-    if (!valid) {
-        console.log(validate.errors);
-        return { isValid: false, errors: transform(validate.errors) };
-    }
-    return { isValid: true, errors: undefined };
+/**
+ * 
+ * @param {object} JSON object, read from superglue.json file
+ */
+function verifySchema(json) {
+    return verify(schema, json);
 }
 
 module.exports = {
-    verify    
+    verify: verifySchema
 };

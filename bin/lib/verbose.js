@@ -1,7 +1,7 @@
 
 let isVerbose = false;
 function setVerbose(value){
-    isVerbose = value;
+    isVerbose = !!value;
 }
 
 function getVerbose() {

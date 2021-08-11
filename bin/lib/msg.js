@@ -5,7 +5,7 @@ function error(m) {
 }
 
 function warn(m) {
-    chalk.yellowBright(m);
+    return chalk.yellowBright(m);
 }
 
 function info(m) {

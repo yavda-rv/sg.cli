@@ -17,8 +17,8 @@ const args = yargs(process.argv.slice(2))
             yargs.positional("verbose", {alias:["v"],desc:"verbosity of command"})
         },
         handler: (argv) => {
-            console.log(argv);
-            //release(argv.type);
+            require("./bin/lib/verbose").setVerbose(argv.verbose);
+            release(argv.type);
         }
     })
     .demandCommand()
