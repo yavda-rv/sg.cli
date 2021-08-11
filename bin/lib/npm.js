@@ -32,8 +32,13 @@ function version(type, opts) {
     return exec(command);
 }
 
+function install() {
+    return exec("npm install");
+}
+
 module.exports = {
     run,
     version,
+    install,
     npx
 }

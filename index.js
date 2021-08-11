@@ -1,20 +1,26 @@
 #!/usr/bin/env node
 
 const yargs = require("yargs/yargs");
-const { createPlugin } = require("./plugin/createPlugin");
+const { create } = require("./bin/commands/create");
 const { release } = require("./bin/commands/release");
 
-const args = yargs(process.argv.slice(2))
-    .command("plugin", "Create Superglue plugin", {}, () => {
-        //createPlugin();
-        console.log("create plugin");
+yargs(process.argv.slice(2))
+    .command({
+        command: "create <name>",
+        desc: "Creates superglue plugin",
+        builder: (yargs) => {
+            yargs.positional("name", { desc: "name of the plugin" })
+        },
+        handler: (argv) => {
+            create(argv.name);
+        }
     })
     .command({
         command: "release <type> [verbose]",
         desc: "Prepares and publishes a release.",
         builder: (yargs) => {
             yargs.positional("type", { choices: ["major", "minor", "patch"] })
-            yargs.positional("verbose", {alias:["v"],desc:"verbosity of command"})
+            yargs.positional("verbose", { alias: ["v"], desc: "verbosity of command" })
         },
         handler: (argv) => {
             require("./bin/lib/verbose").setVerbose(argv.verbose);
@@ -23,4 +29,6 @@ const args = yargs(process.argv.slice(2))
     })
     .demandCommand()
     .help()
+    .showHelpOnFail(true)
+    .recommendCommands()
     .argv;

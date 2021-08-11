@@ -33,7 +33,7 @@ async function release(type) {
     let devVersion = await spinner.spin("Incrementing to dev version...", incrementDevVersion(superglueJson));
     printer.info(`Version updated to dev: ${devVersion}`);
 
-    //await spinner.spin("pushing changes to remote...", push());
+    await spinner.spin("pushing changes to remote...", push());
     printer.info("Changes pushed to git");
 
     const cmdResult = {
