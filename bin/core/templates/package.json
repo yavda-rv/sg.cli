@@ -10,7 +10,7 @@
         "link:all": "npm run link:shell",
         "build:clear": "rimraf ./.temp && rimraf ./lib",
         "build:tsc": "npx tsc -p ./tsconfig.client.json",
-        "build:tsc:watch": "npm run build:tsc -- -w",
+        "build:tsc:watch": "npm run build:tsc -- -w --preserveWatchOutput",
         "build:bundle": "npx rollup -c",
         "build:bundle:watch": "npm run build:bundle -- -w --watch.buildDelay 500",
         "build:dts": "npx api-extractor run --local --verbose",

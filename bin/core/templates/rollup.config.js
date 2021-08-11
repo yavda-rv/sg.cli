@@ -26,5 +26,8 @@ export default {
         replace({
             'process.env.NODE_ENV': JSON.stringify('production')
         })        
-    ]
+    ],
+    watch: {
+        clearScreen: false
+    }
 };
