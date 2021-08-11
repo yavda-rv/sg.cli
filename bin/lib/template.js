@@ -2,12 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const ejs = require("ejs");
 
-async function writeTemplateFile(templateFileName, fileName, context) {
+async function copyFile(templateFileName, fileName, context) {
     let content = await ejs.renderFile(templateFileName, context);
     fs.writeFileSync(fileName, content, { encoding: "utf-8" });
 }
 
-async function copyTemplate(baseDir, targetDir, context, result) {
+async function copyDir(baseDir, targetDir, context, result) {
     let files = fs.readdirSync(baseDir);
     for (let index = 0; index < files.length; index++) {
         let file = files[index];
@@ -16,17 +16,18 @@ async function copyTemplate(baseDir, targetDir, context, result) {
             let targetPath = path.join(targetDir, file);
             if (!fs.existsSync(targetPath)) {
                 fs.mkdirSync(targetPath);
-                result[targetPath] = {}
+                result[file] = {}
             }
-            await copyTemplate(filePath, targetPath, context, result[targetPath]);
+            await copyDir(filePath, targetPath, context, result[file]);
         } else {
             let targetFileName = path.join(targetDir, file);
-            await writeTemplateFile(filePath, targetFileName, context);
-            result[targetFileName] = null;
+            await copyFile(filePath, targetFileName, context);
+            result[file] = null;
         }
     }
 }
 
 module.exports = {
-    copyTemplate
+    copyDir,
+    copyFile
 }

@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require('path');
 const printer = require("../lib/printer");
-const writers = require("../core/writers");
+const template = require("../lib/template");
 const spinner = require("../lib/spinner");
 const npm = require("../lib/npm");
 const git = require("../lib/git");
@@ -11,32 +11,38 @@ const treeify = require("treeify")
 async function create(name) {
     createDirectory(name);
 
-    printer.info("Writing plugin files...");
-    let context = { name: name, user: os.userInfo().username };
+    await spinner.spin("Generating plugin files...", generateFiles(name));
+
+    process.chdir(name);
+
+    await spinner.spin("Initalizing git...", gitInit(process.cwd()));
+    printer.info("Git initialized");
+
+    await spinner.spin("Installing dependencies...", npm.install());
+    printer.info("Dependencies installed");
+
+    await spinner.spin("Compiling plugin...", npm.run("build"));
+    printer.info("Plugin compiled");
+
+    printer.success("Plugin creation successful.");
+}
+
+async function generateFiles(dir) {
+    let context = { 
+        name: dir, 
+        user: os.userInfo().username 
+    };
+
     let result = {};
-    await writers.copyTemplate(path.join(__dirname, "../core/templates"), name, context, result);
-    printer.info("Generated files: ");
-    console.log(treeify.asTree(result));
+    await template.copyDir(path.join(__dirname, "../core/templates"), dir, context, result);
 
-    // process.chdir(name);
-
-    // await spinner.spin("Initalizing git...", gitInit(process.cwd()));
-    // printer.info("Git initialized");
-
-    // await spinner.spin("Installing dependencies...", npmInit());
-    // printer.info("Dependencies installed");
-
-    // printer.success("Plugin creation successful.");
+    printer.info("Plugin files generated: ");
+    printer.info(treeify.asTree({[dir]: result}));
 }
 
 async function gitInit(cwd) {
     await git.cwd(cwd);
     await git.init();
-}
-
-async function npmInit() {
-    await npm.install();
-    await npm.run("build");
 }
 
 function createDirectory(name) {
