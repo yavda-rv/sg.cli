@@ -3,6 +3,7 @@ const path = require('path');
 const cp = require("child_process");
 const printer = require("../lib/printer");
 const readers = require("../core/readers");
+const cpkill = require("../lib/cpkill");
 
 const app = express();
 
@@ -17,6 +18,7 @@ function spwan(tag, command, args) {
     child.on("exit", (code, singal) => {
         console.log(`${tag}: existed with code ${code} and signal ${singal}`);
     });
+    cpkill.add(tag, child);
 }
 
 function runserver(port) {
