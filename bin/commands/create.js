@@ -43,6 +43,8 @@ async function generateFiles(dir) {
 async function gitInit(cwd) {
     await git.cwd(cwd);
     await git.init();
+    await git.add('./*');
+    await git.commit("initial commit");
 }
 
 function createDirectory(name) {
