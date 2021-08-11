@@ -10,7 +10,11 @@ const schema = TYP_OBJ({
         publish: TYP_OBJ({
             dir: TYP_STRING
         })
-    })
+    }),
+    configuration: {
+        type: "object",
+        additionalProperties: true
+    }
 });
 
 /**
