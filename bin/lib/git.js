@@ -8,4 +8,7 @@ const git = simpleGit({
     maxConcurrentProcesses: 1 
 });
 
+/**
+ * @exports simpleGit
+ */
 module.exports = git;
