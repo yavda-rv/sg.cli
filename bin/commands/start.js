@@ -1,11 +1,14 @@
 const express = require('express');
+const cors = require("cors");
 const path = require('path');
 const cp = require("child_process");
 const printer = require("../lib/printer");
 const readers = require("../core/readers");
 const cpkill = require("../lib/cpkill");
+const urljoin= require("url-join");
 
 const app = express();
+app.use(cors());
 
 async function start(port) {
     spwan("COMPILE", "npm", ["run", "build:tsc:watch"]);
@@ -22,20 +25,21 @@ function spwan(tag, command, args) {
 }
 
 function runserver(port) {
+    const url = `http://localhost:${port}/`;
     const libPath = path.join(process.cwd());
     app.use(express.static(libPath));
     app.get("/", function (req, res) {
         console.log(`SERVER: configuration requested`);
-        let config = buildConfiguration();
+        let config = buildConfiguration(url);
         return res.json(config).end();
     });
 
     app.listen(port, () => {
-        printer.success(`SERVER : running at http://localhost:${port}/`);
+        printer.success(`SERVER : running at ${url}`);
     });
 }
 
-function buildConfiguration() {
+function buildConfiguration(url) {
     let package = readers.packageJson();
     let superglue = readers.superglueJson();
     
@@ -44,7 +48,7 @@ function buildConfiguration() {
         version: package.version,
         displayName: package.displayName,
         deps: [],
-        url: package.main,
+        url: urljoin(url, package.main),
         configuration: superglue.configuration
     }
     return result;
