@@ -2,7 +2,7 @@ const msg = require("./msg");
 
 function print(value, method) {
     if (Array.isArray(value)) {
-        value.forEach(m => method(m));
+        value.forEach(m => console.log(method(m)));
     } else {
         console.log(method(value));
     }
