@@ -15,10 +15,15 @@ export default {
         globals: {
             "react": "React",
             "react-dom": "ReactDOM",
-            "sg.shell": "sg"
+            "sg.shell": "sg",
+            "sg.plugin.toolkit": "sg.plugin.toolkit",
+            "sg.plugin.login": "sg.plugin.login",
+            "sg.plugin.dashboards": "sg.plugin.dashboards",
+            "sg.plugin.charts": "sg.plugin.charts",
+            "sg.plugin.grid": "sg.plugin.grid"
         }
     },
-    external: ["react", "react-dom", "sg.shell"],
+    external: ["react", "react-dom", "sg.shell", "sg.plugin.toolkit", "sg.plugin.login", "sg.plugin.dashboards", "sg.plugin.charts",  "sg.plugin.grid"],
     plugins: [
         json(),
         resolve(),

@@ -7,7 +7,12 @@
     "files": ["lib", "!/**/*.map", "!/**/*.json"],
     "scripts": {
         "link:shell": "npm link sg.shell",
-        "link:all": "npm run link:shell",
+        "link:toolkit": "npm link sg.plugin.toolkit",
+        "link:login": "npm link sg.plugin.login",
+        "link:dashboards": "npm link sg.plugin.dashboards",
+        "link:grid": "npm link sg.plugin.grid",
+        "link:charts": "npm link sg.plugin.charts",
+        "link:all": "npm run link:shell && npm run link:login && npm run link:toolkit && npm run link:dashboards && npm run link:charts && npm run link:grid",
         "build:clear": "rimraf ./.temp && rimraf ./lib",
         "build:tsc": "npx tsc -p ./tsconfig.client.json",
         "build:tsc:watch": "npm run build:tsc -- -w --preserveWatchOutput",
@@ -37,6 +42,11 @@
         "rollup": "^2.23.0",
         "rollup-plugin-terser": "^6.1.0",
         "sg.shell": "../output/sg.shell-1.10.3.tgz",
+        "sg.plugin.toolkit": "../output/sg.plugin.toolkit-2.2.0.tgz",
+        "sg.plugin.grid": "../output/sg.plugin.grid-2.0.1.tgz",
+        "sg.plugin.dashboards": "../output/sg.plugin.dashboards-3.0.0.tgz",
+        "sg.plugin.login": "../output/sg.plugin.login-3.1.0.tgz",
+        "sg.plugin.charts": "../output/sg.plugin.charts-4.0.0.tgz",
         "typescript": "^3.9.7"
     },
     "dependencies": {}
