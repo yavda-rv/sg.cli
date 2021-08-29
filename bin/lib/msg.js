@@ -16,9 +16,14 @@ function success(m) {
     return chalk.greenBright(m);
 }
 
+function asis(m) {
+    return m;
+}
+
 module.exports = {
     error,
     warn,
     info,
     success,
+    asis
 }

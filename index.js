@@ -4,6 +4,7 @@ const yargs = require("yargs/yargs");
 const { create } = require("./bin/commands/create");
 const { release } = require("./bin/commands/release");
 const { start } = require("./bin/commands/start");
+const { fragment } = require("./bin/commands/fragment");
 
 yargs(process.argv.slice(2))
     .command({
@@ -14,6 +15,16 @@ yargs(process.argv.slice(2))
         },
         handler: (argv) => {
             create(argv.name);
+        }
+    })
+    .command({
+        command: "fragment [name]",
+        desc: "Creates a fragment for Superglue plugin.",
+        builder: (yargs) => {
+            yargs.positional("name", { desc: "name of the new fragment" })
+        },
+        handler: (argv) => {
+            fragment(argv.name);
         }
     })
     .command({

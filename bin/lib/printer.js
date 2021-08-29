@@ -8,6 +8,10 @@ function print(value, method) {
     }
 }
 
+function asis(message) {
+    print(message, msg.asis);
+}
+
 function error(message) {
     print(message, msg.error);
 }
@@ -28,5 +32,6 @@ module.exports = {
     error,
     warn,
     info,
-    success
+    success,
+    asis
 }
